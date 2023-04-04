@@ -33,7 +33,8 @@ The BSP implementation uses applications of effects as its super step. Each thre
 
 ### Pipeline
 
-![speedup-pipeline1.png](Parallel%20Programming%20-%20Project%202%20cffe52ade5ec449db91cf915356c83f4/speedup-pipeline1.png)
+![speedup-pipeline1](https://user-images.githubusercontent.com/107568169/229822509-5d538e12-7aaf-42c9-99e5-3a03c94a492a.png)
+
 
 The speed up graph for pipeline shows what is expected. As the “problem” size increases, we see greater benefits from parallelism. This follows from the nature of the computations, each pixel transformation is independent of other pixels in the output file and operations of other threads. Of course, these benefits start to plateau as there are many sequential elements in the program (e.g., loading the requests from decoder). The plateau also occurs because each test only has 10 tasks. Therefore, two threads in the 12-core run will sit idle, limiting performance improvement over the 8-core test.
 
@@ -41,7 +42,8 @@ While the appearance of higher speedup in the small directory vs. for the mixtur
 
 ### Bulk Synchronized Parallel
 
-![speedup-bsp1.png](Parallel%20Programming%20-%20Project%202%20cffe52ade5ec449db91cf915356c83f4/speedup-bsp1.png)
+![speedup-bsp1](https://user-images.githubusercontent.com/107568169/229822466-1a9317d8-1058-421c-886f-49fec26d5df2.png)
+
 
 The speed up graph for BSP is close to what is expected. We see the highest speed up for the big directory, with lower speed up for small and mixture. Interestingly, the lines for the big and small directories suggests the program may run even faster if we add more cores. This makes sense given the even distribution of work across threads and the suitability of matrix multiplication for parallelism.
 
@@ -49,7 +51,7 @@ Lower speed up for the mixture directory vs. the small directory is puzzling bec
 
 The kink in the speedup for the small directory can be attributed to variation is system traffic, which processes like loading images are highly sensitive to. Previous tests showed monotonic increases for the small directory.
 
-#Discussion
+# Discussion
 - **Hot Spots and Bottlenecks in the Program** The sequential program has hotspot for the convolution method as it requires millions of calculations to process a single small image. It is difficult to say whether the sequential program has any bottlenecks as it is always proceeding one task at a time
 - **Comparison of Parallel Implementations** Pipeline is performing better than BSP because it has higher throughput of tasks. Pipeline processes N tasks for N threads, with $N^2$ threads working in total. Whereas, BSP applies N threads to a single task. There is also some inter-thread dependency in BSP because every thread moves in lock-step. While this exists for the MiniRoutines in pipeline, there is greater independence among worker level routines. BSP also suffers from lock contention, as every thread must access the lock twice per cycle - though it is possible to simplify to one access per cycle. Lock contention scales linearly with thread count.
 - **Scalability** Problem size significantly affects performance. The larger the image, the greater the benefits of parallelism because overhead is amortized over a larger set of computations
