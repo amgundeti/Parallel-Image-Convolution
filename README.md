@@ -28,9 +28,6 @@ The pipeline version relies on four functions (RunPipeline, ImageLoader, Worker,
 
 The BSP implementation uses applications of effects as its super step. Each thread is given a section of the image to work on based on its thread id, and the thread with the highest id is termed the lead thread and given the image “stub.” Threads apply the required effect to their section and wait for all other threads to complete (using a condition variable). The last thread to finish updates the EffectCount variable to point to the next effect, or updates the DirectoryIdx variable to point to the next directory to load the image from. The last thread to arrive at the top of the loop is also responsible for checking whether a new image needs to be loaded or if another request should be read in from the json decoder.
 
-## Instructions for Running Testing Script
-
-The testing script can be launched via the following command: `sbatch benchmark-proj2.sh`.
 
 # Speed Up Analysis
 
